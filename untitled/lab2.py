@@ -1,46 +1,122 @@
-import sympy as sy
-from sympy import S
-def horner(coefficients, value):
-    returnable_arr = coefficients.copy()
-    if (len(coefficients) <= 2):
-        returnable_arr[0] = coefficients[0]
-        returnable_arr[1] = coefficients[1] + value*returnable_arr
-        return returnable_arr
-    else:
-        iterator = 0
-        for coefficient in coefficients:
-            if iterator == 0:
-                returnable_arr[iterator] = coefficients[iterator]
-                iterator += 1
+'''import sympy as sp
+def lagrange(tab_with_xn_s):
+    value_range = len(tab_with_xn_s[0])
+    final_tab = ["" for x in range(value_range)]
+    result_string = ''
+
+    for iterator in range(0,value_range):
+        string_part_1 = ''
+        string_part_2 = ''
+
+        for i in range(0,value_range):
+            if i != iterator:
+                if tab_with_xn_s[0][i] > 0 :
+                    string_part_1 += '(x-' + str(tab_with_xn_s[0][i]) + ')'
+
+                    if(i<value_range-1 ):
+                        #tutaj jest bład
+                        if i == 3:
+                            string_part_1 += '*'
+                        print("iterator: ",iterator,"i: ", i)
+
+                else:
+                    string_part_1 += '(x' + str(tab_with_xn_s[0][i]) + ')'
+                    if (i < value_range - 1 ):
+                        string_part_1 += '*'
+
             else:
-                returnable_arr[iterator] = coefficient + returnable_arr[iterator-1] * value
-                iterator += 1
-        return returnable_arr
+                pass
 
-def task2(coefficients,value,significance):
-    print(horner(coefficients,value))
-    mytab = horner(coefficients,value)
-    print(mytab)
-    val = mytab[len(mytab)-1]
-    print(val)
-    k = sy.symbols('k')
-    print(sy.solveset((val<=(value**4-1)/(value-1))*0.5*10**k<significance,k,S.Reals).evalf())
-    print(sy.solveset((-11.625<=(2.755**4-1)/(2.755-1))*0.5*10**k< 0.001, k, S.Reals).evalf())
+        sum = 1
+        print(tab_with_xn_s[0][iterator])
+        for i in range(0, value_range):
+             if iterator != i:
+                 sum *= (tab_with_xn_s[0][iterator] -  tab_with_xn_s[0][i])
+             else:
+                 pass
+        print(sum)
+        print(1/sum)
+        print(tab_with_xn_s[1][iterator])
+        print((1/sum)*tab_with_xn_s[1][iterator])
+        string_part_2 += str((1/sum)*tab_with_xn_s[1][iterator])
+        final_string =   string_part_1 + '*(' +  string_part_2 + ')'
 
-def horner_intervals(coefficients,value):
-    hornered = horner(coefficients,value)
-    value_to_verify = True
-    for element in hornered:
-        if element < 0:
-            value_to_verify = False
-    return value_to_verify
+        final_tab[iterator] += '(' +  final_string + ')'
+        result_string += final_string
+        if (iterator < value_range - 1):
+            result_string += '+'
+    return result_string
 
 
 
-coefficients = [1, -3.5,0, 2, -1]
-print(coefficients[2])
-value_in_point = 9
-print(horner(coefficients, value_in_point))
-x = sy.symbols('x')
-task2(coefficients,value_in_point,0.001)
 
+coeffs  = [[1,1.5,2,2.5,3] , [1,3,4,2,0]]
+tab =lagrange(coeffs)
+#print(tab)
+print(len(tab))
+newstr = tab[:191] + tab[192:]
+print(newstr)
+print(sp.expand('(x-1.5)*(x-2)*(x-2.5)*(x-3)*(0.6666666666666666)+(x-1)*(x-2)*(x-2.5)*(x-3)*(-2.6666666666666665)+(x-1)*(x-1.5)*(x-2.5)*(x-3)*(4.0)'))
+print(sp.expand('(x-1)*(x-1.5)*(x-2)*(x-3)*(-2.6666666666666665)+(x-1)*(x-1.5)*(x-2)*(x-2.5)*(0.6666666666666666)'))
+print(sp.expand(newstr))'''
+import sympy as sp
+def lagrange(tab_with_xn_s):
+    value_range = len(tab_with_xn_s[0])
+    final_tab = ["" for x in range(value_range)]
+    result_string = ''
+    print(tab_with_xn_s[0][4])
+    for iterator in range(0,value_range):
+        string_part_1 = ''
+        string_part_2 = ''
+        for i in range(0,value_range):
+            if i != iterator:
+                if tab_with_xn_s[0][i] > 0 :
+                    string_part_1 += '(x-' + str(tab_with_xn_s[0][i]) + ')'
+
+                    if(i<value_range-1 ):
+                        #moze sie zepsuc bardzo
+                        if not (iterator == (value_range-1) and i == (value_range-2)):
+                            string_part_1 += '*'
+                            print("iterator: ",iterator,"i: ", i)
+
+                else:
+                    string_part_1 += '(x' + str(tab_with_xn_s[0][i]) + ')'
+                    if (i < value_range - 1 ):
+                        string_part_1 += '*'
+            else:
+                pass
+
+        sum = 1
+        print(tab_with_xn_s[0][iterator])
+        for i in range(0, value_range):
+             if iterator != i:
+                 sum *= (tab_with_xn_s[0][iterator] -  tab_with_xn_s[0][i])
+             else:
+                 pass
+
+
+        #print(sum)
+        #print(1/sum)
+        #print(tab_with_xn_s[1][iterator])
+        #print((1/sum)*tab_with_xn_s[1][iterator])
+        string_part_2 += str((1/sum)*tab_with_xn_s[1][iterator])
+        final_string =   string_part_1 + '*(' +  string_part_2 + ')'
+
+        final_tab[iterator] += '(' +  final_string + ')'
+        result_string += final_string
+        if (iterator < value_range - 1):
+            result_string += '+'
+    return result_string
+
+
+
+
+coeffs  = [[1,1.5,2,2.5,3] , [1,3,4,2,0]]
+tab =lagrange(coeffs)
+#print(tab)
+print(len(tab))
+#newstr = tab[:191] + tab[192:]
+newstr = tab
+print(newstr)
+print(sp.expand(newstr))
+print(sp.expand('((x-6)*(4-x)/8)+((x-7)*(x-8)/7)'))
